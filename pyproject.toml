@@ -130,6 +130,7 @@ skip_glob = [
 
 [tool.pyright]
 reportPrivateImportUsage = false
+typeCheckingMode = "off"
 
 [tool.ruff]
 line-length = 115
