@@ -379,7 +379,13 @@ if is_arm64; then
     echo "Detected ARM64 architecture (Jetson Orin), using device access instead of nvidia runtime..."
     GPU_RUNTIME_ARGS="--device /dev/nvidia0 --device /dev/nvidiactl --device /dev/nvidia-modeset --device /dev/nvidia-uvm --device /dev/nvidia-uvm-tools"
 else
-    GPU_RUNTIME_ARGS="--gpus all --runtime=nvidia"
+    if command -v nvidia-smi &> /dev/null; then
+        echo "NVIDIA runtime is available."
+        GPU_RUNTIME_ARGS="--gpus all --runtime=nvidia"
+    else
+        echo "NVIDIA runtime is NOT available."
+        exit 1  # Exit or handle this scenario gracefully
+    fi
 fi
 
 # Common Docker run parameters
@@ -398,18 +404,23 @@ DOCKER_RUN_ARGS="--hostname $HOSTNAME \
     -e NVIDIA_DRIVER_CAPABILITIES=graphics,compute,utility \
     -e __GLX_VENDOR_LIBRARY_NAME=nvidia \
     -e USERNAME=$USERNAME \
-    -e GR00T_WBC_DIR="$DOCKER_HOME_DIR/Projects/$WORKTREE_NAME" \
+    -e GR00T_WBC_DIR=\"$DOCKER_HOME_DIR/Projects/$WORKTREE_NAME\" \
     -v /dev/bus/usb:/dev/bus/usb \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v $HOME/.ssh:$DOCKER_HOME_DIR/.ssh \
     -v $HOME/.gear:$DOCKER_HOME_DIR/.gear \
     -v $HOME/.Xauthority:$DOCKER_HOME_DIR/.Xauthority \
-    -v $PROJECT_DIR:$DOCKER_HOME_DIR/Projects/$(basename "$PROJECT_DIR")
+    -v $PROJECT_DIR:$DOCKER_HOME_DIR/Projects/$(basename \"$PROJECT_DIR\") \
     --device /dev/snd \
     --group-add audio \
     -e PULSE_SERVER=unix:/run/user/$(id -u)/pulse/native \
     -v /run/user/$(id -u)/pulse/native:/run/user/$(id -u)/pulse/native \
-    -v $HOME/.config/pulse/cookie:/home/$USERNAME/.config/pulse/cookie"
+    -v $HOME/.config/pulse/cookie:/home/$USERNAME/.config/pulse/cookie \
+    --device /dev/nvidia0 --device /dev/nvidiactl --device /dev/nvidia-uvm --device /dev/nvidia-modeset \
+    -v /usr/lib/x86_64-linux-gnu/nvidia:/usr/lib/nvidia:ro \
+    -v /usr/lib/x86_64-linux-gnu/libGL.so.1:/usr/lib/libGL.so.1:ro \
+    -v /usr/lib/x86_64-linux-gnu/libGLX_nvidia.so.0:/usr/lib/libGLX_nvidia.so.0:ro"
+
 
 # Check if RL mode first, then handle container logic
 if [ "$DEPLOY" = true ]; then

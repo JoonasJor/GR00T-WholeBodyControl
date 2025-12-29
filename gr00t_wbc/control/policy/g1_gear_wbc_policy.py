@@ -241,7 +241,7 @@ class G1GearWbcPolicy(Policy):
         return {"body_action": (cmd_q, cmd_dq, cmd_tau)}
 
     def handle_keyboard_button(self, key):
-        if key == "]":
+        if key == "i":
             self.use_policy_action = True
         elif key == "o":
             self.use_policy_action = False

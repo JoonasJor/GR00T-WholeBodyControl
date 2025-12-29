@@ -154,4 +154,4 @@ class G1DecoupledWholeBodyPolicy(Policy):
             self.lower_body_policy.handle_keyboard_button(key)
 
     def activate_policy(self):
-        self.handle_keyboard_button("]")
+        self.handle_keyboard_button("i")

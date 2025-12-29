@@ -267,7 +267,7 @@ class LocomotionRunner:
         return False
 
     def activate(self):
-        self.keyboard_event_publisher.publish("]")
+        self.keyboard_event_publisher.publish("i")
 
     def release(self):
         self.keyboard_event_publisher.publish("9")
