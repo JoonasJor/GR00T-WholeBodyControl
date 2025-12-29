@@ -61,7 +61,7 @@ Once inside the container, the control policies can be launched directly.
   ```
 
 Keyboard shortcuts (terminal window):
-- `]`: Activate policy
+- `i`: Activate policy
 - `o`: Deactivate policy
 - `9`: Release / Hold the robot
 - `w` / `s`: Move forward / backward
@@ -69,6 +69,10 @@ Keyboard shortcuts (terminal window):
 - `q` / `e`: Rotate left / right
 - `z`: Zero navigation commands
 - `1` / `2`: Raise / lower the base height
+- `3` / `4`: Roll +/-
+- `5` / `6`: Pitch +/-
+- `7` / `8`: Yaw +/-
+- `m` / `n`: Freq +/-
 - `backspace` (viewer): Reset the robot in the visualizer
 
 ---
@@ -138,3 +142,10 @@ Operations in the `data exporter` window (`control_data_teleop` pane, right top)
 Operations on Pico controllers:
 - `A`: Start/Stop recording
 - `B`: Discard trajectory
+
+## KDE fix
+On host:
+Xephyr :1 -screen 1024x768 & xhost +local:docker
+
+In container:
+export DISPLAY=:1
