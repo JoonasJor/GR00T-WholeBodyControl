@@ -105,7 +105,7 @@ class BaseConfig(ArgsConfigTemplate):
     enable_waist: bool = False
     """Whether to include waist joints in IK."""
 
-    with_hands: bool = True
+    with_hands: bool = False
     """Enable hand functionality. When False, robot operates without hands."""
 
     high_elbow_pose: bool = False
